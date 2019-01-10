@@ -1,0 +1,96 @@
+﻿@model EmployeeDemo.Models.CustomModels.EmpModel
+
+@using (Ajax.BeginForm("Employee", "Employee", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "_List", OnSuccess = "fnSuccess();OnReset();", OnBegin = "return onBegine(); fnvalidation();" }))
+{
+
+    @Html.HiddenFor(m => m.empId, new { @class = "form-control formcontrol" })
+
+    <div class="form-group row">
+        <label class="col-md-2 control-label">First Name*</label>
+        <div class="col-md-4">
+            @Html.TextBox("fName", Model.fName, new { @class = "form-control formcontrol", @placeholder = "First Name", @title = "First Name", required = "required", @maxlength = "50" })
+        </div>
+
+        <label class="col-md-1 control-label">Last Name*</label>
+        <div class="col-md-3">
+            @Html.TextBox("lName", Model.lName, new { @class = "form-control formcontrol", @placeholder = "Last Name", @title = "Last Name", required = "required", @maxlength = "50" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Middle Name*</label>
+        <div class="col-md-4">
+            @Html.TextBox("mName", Model.mName, new { @class = "form-control formcontrol", @placeholder = "Middle Name", @title = "Middle Name", required = "required", @maxlength = "50" })
+        </div>
+
+        <label class="col-md-1 control-label">Email*</label>
+        <div class="col-md-3">
+            @Html.TextBox("email", Model.email, new { @class = "form-control formcontrol", @placeholder = "Email", @title = "Email", required = "required", @maxlength = "100" })
+        </div>
+        <label class="col-md-2 formcontrol" style="color:red" id="emailError"></label>
+    </div>
+
+
+
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Gender</label>
+        <div class="col-md-4">
+            @if (Model.gender == 2)
+            {
+                <label class="col-md-2 control-label" style="">Male</label><div class="col-md-2"> @Html.RadioButton("gender", "1", new { @class = "formcontrol", @id = "radMale" })</div>
+                <label class="col-md-3 control-label">Female</label> <div class="col-md-3"> @Html.RadioButton("gender", "2", true, new { @class = "formcontrol", @id = "radFemale" })</div>
+            }
+            else
+            {
+                <label class="col-md-2 control-label">Male</label> <div class="col-md-2"> @Html.RadioButton("gender", "1", true, new { @class = "formcontrol", @id = "radMale" })</div>
+                <label class="col-md-3 control-label">Female</label> <div class="col-md-3"> @Html.RadioButton("gender", "2", new { @class = "formcontrol", @id = "radFemale" })</div>
+            }
+        </div>
+
+        <label class="col-md-1 control-label">Birthdate</label>
+        <div class='col-md-3'>
+            @if (Model.birthdate != null)
+            {
+                @Html.TextBox("birthdate", Model.birthdate.Value.ToShortDateString(), new { @class = "form-control formcontrol", @placeholder = "Birthdate", @title = "Birthdate", @id = "birthdate" })
+            }
+            else
+            {
+                @Html.TextBox("birthdate", Model.birthdate, new { @class = "form-control formcontrol", @placeholder = "Birthdate", @title = "Birthdate", @id = "birthdate", @value = "01-01-2000" })
+            }
+        </div>
+    </div>
+
+    <div class="form-group row">
+            <label class="col-md-2 control-label">Hobby</label>
+            <div class="col-md-8">
+                @for (int i = 0; i < Model.hbList.Count; i++)
+                {
+                    @Html.CheckBoxFor(m => Model.hbList[i].Selected, new { @class = "formcontrol" }) <span>&nbsp;</span>
+                    @Model.hbList[i].Text<span>&nbsp;</span>
+                    @Html.HiddenFor(m => Model.hbList[i].Value)
+                    @Html.HiddenFor(m => Model.hbList[i].Text)
+                }
+            </div>
+            <label class="col-md-2 formcontrol" style="color:red" id="checkBoxError"></label>
+        </div>
+
+   
+
+    <div class="form-group row">
+        @*<label class="col-md-2 control-label">Designation*</label>
+            <div class="col-md-4">
+                @Html.DropDownList("EmpDesignation", (IEnumerable<SelectListItem>)ViewBag.Designation, "Select Designation", new { @class = "form-control formcontrol", @required = "required" })
+            </div>*@
+
+        <label class="col-md-2 control-label">Address</label>
+        <div class="col-md-4">
+            @Html.TextArea("address", Model.address, new { @class = "form-control formcontrol", @placeholder = "Address", @title = "Address", @id = "address" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-offset-2 col-lg-10">
+            <input type="submit" class="btn btn-sm btn-success" id="validateBtn" value="Save">
+            <button type="button" class="btn btn-sm btn-primary" onclick="fnReset();OnReset();">Reset</button>
+        </div>
+    </div>
+}

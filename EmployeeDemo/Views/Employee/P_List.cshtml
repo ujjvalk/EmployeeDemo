@@ -1,0 +1,51 @@
+﻿
+@model EmployeeDemo.Models.CustomModels.EmpModel
+
+<input type="hidden" value="@ViewBag.Successmessage" id="SuccessMessage" />
+<table id="example" class="display example table-striped table-bordered table-hover" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Address</th>
+            <th>age</th>
+            <th>salary</th>
+            <th style="text-align:center;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.empList)
+        {
+        <tr>
+            <td>@item.fName  @item.mName @item.lName  </td>
+            <td>@item.email</td>
+            @if (item.gender != null && item.gender == 2)
+            {
+                <td>Female</td>
+            }
+            else
+            {
+                <td>Male</td>
+            }
+            <td>@item.address</td>
+            @if (item.birthdate != null)
+            {
+                <td>@{var age = Convert.ToInt32((DateTime.Now - item.birthdate.Value).TotalDays / 365); } @age</td>
+            }
+            else
+            {
+                <td>-</td>
+            }
+            <td>@item.sal</td>
+            <td style="text-align:center;">
+                @Ajax.ActionLink(" ", "Employee", new { id = item.empId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "_Form", OnSuccess = "scrolltop();", OnComplete = "edit();" }, new { @Class = "btn btn-info glyphicon glyphicon-edit icon-white", @id = "btnedit" })
+
+                <a onclick="DeleteRecords('@item.empId', 'Y') " href="javascript:;" class="btn btn-danger glyphicon glyphicon-trash icon-white"></a>
+            </td>
+        </tr>
+        }
+         
+    </tbody>
+</table>

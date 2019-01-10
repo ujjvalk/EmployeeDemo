@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Salary";
+    Layout = "~/Views/Shared/_MyLayoutPage.cshtml";
+}
+
+<h2 style="text-align:center;">Salary</h2>
+
+<div class="panel panel-default ">
+    <div class="panel-heading">
+        <h3 class="panel-title">Salary Form</h3>
+    </div>
+    <div class="panel-body" id="_Form">
+        @Html.Partial("P_Form")
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Salary List</h3>
+    </div>
+    <div class="panel-body" id="_List">
+        @Html.Partial("P_List")
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "aoColumnDefs": [{ "bSortable": false, 'aTargets': [3] }],
+            "bDestroy": true
+        });
+
+        $('#saldate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-mm-yy',
+        });
+    });
+
+    function OnReset() {
+        $('#example').dataTable({
+            "aoColumnDefs": [{ "bSortable": false, 'aTargets': [3] }],
+            "bDestroy": true
+        });
+    }
+
+    function DeleteRecords(id, active) {
+        var msg = "Delete";
+        if (active == 'Y') {
+            msg = "Delete";
+        }
+        swal(
+               {
+                   title: "Are you sure?",
+                   text: "You will " + msg.toLowerCase() + " record after click on yes.",
+                   type: "warning",
+                   showCancelButton: true,
+                   confirmButtonColor: "#DD6B55",
+                   confirmButtonText: "Yes",
+                   cancelButtonText: "No",
+                   closeOnConfirm: false,
+                   closeOnCancel: false
+               },
+               function (isConfirm) {
+                   if (isConfirm) {
+                       $.ajax({
+                           type: 'Post',
+                           url: '@Url.Action("Delete", "Salary")',
+                           datatype: 'text',
+                           data: { id: id },
+                           success: function (i) {
+                               document.getElementById('_List').innerHTML = i;
+                               $('#example').dataTable({
+                                   "aoColumnDefs": [{ "bSortable": false, 'aTargets': [3] }],
+                                   "bDestroy": true
+                               });
+                           },
+                           error: function (i) {
+                               swal({
+                                   title: "" + msg + "",
+                                   text: "There is a error in record please contact administrator.",
+                                   type: "error",
+                                   timer: 2000
+                               });
+                           }
+
+                       });
+                       swal({
+                           title: "" + msg + "",
+                           text: "Your record has been " + msg.toLowerCase() + ".",
+                           type: "success",
+                           timer: 2000
+                       });
+                   }
+                   else {
+                       swal({
+                           title: "Cancelled",
+                           text: "Your record is safe.",
+                           type: "error",
+                           timer: 2000
+                       });
+                   }
+               });
+    }
+    function edit() {
+        $('#saldate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-mm-yy',
+        });
+    }
+</script>

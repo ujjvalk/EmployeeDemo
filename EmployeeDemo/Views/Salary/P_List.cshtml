@@ -1,0 +1,35 @@
+﻿
+
+@model EmployeeDemo.Models.CustomModels.SalaryModel
+
+<input type="hidden" value="@ViewBag.Successmessage" id="SuccessMessage" />
+<table id="example" class="display example table-striped table-bordered table-hover" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Salary</th>
+            <th>Date</th>
+            <th style="text-align:center;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.salList)
+        {
+            <tr>
+                <td>@item.fName  @item.mName @item.lName </td>
+                <td>@item.sal</td>
+                @if (item.date != null)
+                {
+                    <td>@item.date.ToString("yyyy-MM-dd")</td>
+                }
+                <td style="text-align:center;">
+                    @Ajax.ActionLink(" ", "Employee", new { id = item.salaryId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "_Form", OnSuccess = "scrolltop();", OnComplete = "edit();" }, new { @Class = "btn btn-info glyphicon glyphicon-edit icon-white", @id = "btnedit" })
+
+                    <a onclick="DeleteRecords('@item.salaryId', 'Y') " href="javascript:;" class="btn btn-danger glyphicon glyphicon-trash icon-white"></a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

@@ -1,0 +1,40 @@
+﻿@model EmployeeDemo.Models.CustomModels.SalaryModel
+
+@using (Ajax.BeginForm("Salary", "Salary", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "_List", OnSuccess = "fnSuccess();OnReset();", OnBegin = "return fnvalidation();" }))
+{
+    @Html.HiddenFor(m => m.salaryId, new { @class = "form-control formcontrol" })
+
+
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Employee*</label>
+        <div class="col-md-4">
+            @Html.DropDownList("empId", (IEnumerable<SelectListItem>)ViewBag.EmpList, "Select Employee", new { @class = "form-control formcontrol", @required = "required" })
+        </div>
+
+        <label class="col-md-1 control-label">Salary*</label>
+        <div class="col-md-3">
+            @Html.TextBox("sal", Model.sal, new { @class = "form-control formcontrol", @placeholder = "Salary", @title = "Salary", @numeric = true, @required = "required", @maxlength = "12" })
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Salary Date*</label>
+        <div class='col-md-4'>
+            @if (Model.date != null)
+            {
+                @Html.TextBox("date", Model.date.ToShortDateString(), new { @class = "form-control formcontrol", @placeholder = "salary date", @title = "date", @id = "saldate", @required = "required" })
+            }
+            else
+            {
+                @Html.TextBox("date", Model.date, new { @class = "form-control formcontrol", @placeholder = "salary date", @title = "date", @id = "saldate", @value = "", @required = "required" })
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-offset-2 col-lg-10">
+            <input type="submit" class="btn btn-sm btn-success" id="validateBtn" value="Save">
+            <button type="button" class="btn btn-sm btn-primary" onclick="fnReset();OnReset();">Reset</button>
+        </div>
+    </div>
+}
